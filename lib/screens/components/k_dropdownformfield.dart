@@ -32,25 +32,28 @@ class _DropDownState extends State<DropDown> {
                   }
                 });
               },
-              child: TextFormField(
-                enabled: true,
-                controller: categoryController,
-                decoration: InputDecoration(
-                    labelText: "Priority",
-                    labelStyle: TextStyle(color: KColor.k_brderOutline),
-                    border: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 2, color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    suffixIcon: Icon(
-                      showDropdown ? Icons.expand_less : Icons.expand_more,
-                      size: 18,
-                    )),
+              child: Container(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(
+                        width: 0.6, color: Colors.grey.withOpacity(0.5))),
+                child: TextFormField(
+                  controller: categoryController,
+                  enabled: false,
+                  decoration: InputDecoration(
+                      labelText: "Priority",
+                      labelStyle:
+                          TextStyle(fontSize: 15, color: KColor.k_brderOutline),
+                      // focusedBorder: OutlineInputBorder(
+                      //   borderSide: const BorderSide(color: Colors.grey),
+                      // ),
+                      suffixIcon: Icon(
+                        showDropdown ? Icons.expand_less : Icons.expand_more,
+                        size: 18,
+                      )),
+                ),
               ),
             ),
             showDropdown
@@ -78,6 +81,7 @@ class _DropDownState extends State<DropDown> {
                                       style: TextStyle(color: Colors.black54),
                                     ),
                                   ),
+                                  Divider()
                                 ],
                               ),
                             ),

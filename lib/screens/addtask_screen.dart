@@ -80,6 +80,13 @@ class _AddTaskState extends State<AddTask> {
                 height: 20,
               ),
               DropDown(),
+              const SizedBox(
+                height: 30,
+              ),
+              Button(
+                color: KColor.k_bg,
+                button: 'Add',
+              )
             ],
           ),
         ),
