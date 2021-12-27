@@ -9,7 +9,7 @@ class DropDown extends StatefulWidget {
 }
 
 class _DropDownState extends State<DropDown> {
-  TextEditingController categoryController = new TextEditingController();
+  TextEditingController categoryController = TextEditingController();
   List category = [
     "High",
     "Medium",
@@ -19,7 +19,10 @@ class _DropDownState extends State<DropDown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 10, left: 10),
+        margin: const EdgeInsets.only(
+          right: 10,
+          left: 10,
+        ),
         child: Column(
           children: [
             GestureDetector(
@@ -32,34 +35,31 @@ class _DropDownState extends State<DropDown> {
                   }
                 });
               },
-              child: Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                        width: 0.6, color: Colors.grey.withOpacity(0.5))),
-                child: TextFormField(
-                  controller: categoryController,
-                  enabled: false,
-                  decoration: InputDecoration(
-                      labelText: "Priority",
-                      labelStyle:
-                          TextStyle(fontSize: 15, color: KColor.k_brderOutline),
-                      // focusedBorder: OutlineInputBorder(
-                      //   borderSide: const BorderSide(color: Colors.grey),
-                      // ),
-                      suffixIcon: Icon(
-                        showDropdown ? Icons.expand_less : Icons.expand_more,
-                        size: 18,
-                      )),
-                ),
+              child: TextFormField(
+                controller: categoryController,
+                enabled: false,
+                decoration: InputDecoration(
+                    labelText: "Priority",
+                    labelStyle:
+                        TextStyle(fontSize: 15, color: KColor.k_brderOutline),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    suffixIcon: Icon(
+                      showDropdown ? Icons.expand_less : Icons.expand_more,
+                      size: 18,
+                    )),
               ),
             ),
             showDropdown
                 ? Container(
                     width: MediaQuery.of(context).size.width - 50,
-                    margin: EdgeInsets.only(top: 5),
+                    margin: const EdgeInsets.only(top: 5),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: List.generate(category.length, (index) {
@@ -70,20 +70,18 @@ class _DropDownState extends State<DropDown> {
                                 showDropdown = false;
                               });
                             },
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Text(
-                                      "${category[index]}",
-                                      style: TextStyle(color: Colors.black54),
-                                    ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Text(
+                                    "${category[index]}",
+                                    style:
+                                        const TextStyle(color: Colors.black54),
                                   ),
-                                  Divider()
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           );
                         })),
