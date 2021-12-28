@@ -5,16 +5,18 @@ class KTextFields extends StatefulWidget {
   final decoration;
   final keyboardtype;
   final TextEditingController? controller;
-  final validator;
+  final validator, readonly;
+  final onTap;
   bool obsecuretext;
 
-  KTextFields({
-    this.controller,
-    required this.obsecuretext,
-    required this.decoration,
-    required this.keyboardtype,
-    this.validator,
-  });
+  KTextFields(
+      {this.onTap,
+      this.controller,
+      required this.obsecuretext,
+      required this.decoration,
+      this.keyboardtype,
+      this.validator,
+      this.readonly});
 
   @override
   State<KTextFields> createState() => _KTextFieldsState();
@@ -26,6 +28,8 @@ class _KTextFieldsState extends State<KTextFields> {
     return Container(
       padding: const EdgeInsets.all(10),
       child: TextFormField(
+        readOnly: widget.readonly,
+        onTap: widget.onTap,
         keyboardType: widget.keyboardtype,
         obscureText: widget.obsecuretext,
         controller: widget.controller,
