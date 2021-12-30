@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:todoapp/model/todo_model.dart';
 import 'package:todoapp/style/style.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyTask extends StatefulWidget {
   MyTask();
@@ -12,6 +15,33 @@ class MyTask extends StatefulWidget {
 class _MyTaskState extends State<MyTask> {
   DateFormat dateFormat = DateFormat('MMM dd,yyyy');
   int count = 0;
+
+  @override
+  // late SharedPreferences prefs;
+  // getSharedPreferences() async {
+  //   prefs = await SharedPreferences.getInstance();
+  // }
+  //
+  // retrieveStringValue() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   String? value = prefs.getString('key');
+  //
+  //   print(value);
+  //   setState(() {
+  //     newtodoList = value == null || value.isEmpty ? [] : jsonDecode(value);
+  //   });
+  // }
+  // retrieveIntValue() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   int? value = prefs.getInt("status");
+  //   print(value);
+  // }
+
+  void initState() {
+    super.initState();
+
+    retrieveStringValue();
+  }
 
   @override
   Widget build(BuildContext context) {

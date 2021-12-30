@@ -1,26 +1,46 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todoapp/style/style.dart';
 import 'package:intl/intl.dart';
+import 'package:todoapp/model/todo_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddTask extends StatefulWidget {
   @override
   _AddTaskState createState() => _AddTaskState();
 }
 
-class Todo {
-  Todo(
-      {required this.todo,
-      required this.priority,
-      required this.date,
-      required this.isChecked});
-  final String todo, priority;
-  bool isChecked;
-  DateTime date;
-  //bool checked;
-}
+// class Todo {
+//   Todo(
+//       {required this.todo,
+//       required this.priority,
+//       required this.date,
+//       required this.isChecked});
+//   final String todo, priority;
+//   bool isChecked;
+//   DateTime date;
+//   //bool checked;
+// }
 
 List<Todo> newtodoList = [];
+// late SharedPreferences prefs;
+// getSharedPreferences() async {
+//   prefs = await SharedPreferences.getInstance();
+// }
+//
+// saveStringValue() async {
+//   prefs = await SharedPreferences.getInstance();
+//   print(jsonEncode(newtodoList));
+//   prefs.setString('key', jsonEncode(newtodoList));
+//   print(prefs);
+// }
+// saveIntValue() async {
+//   prefs = await SharedPreferences.getInstance();
+//   prefs.setInt("status", 20);
+//   print(prefs.getInt("status"));
+// }
 
 class _AddTaskState extends State<AddTask> {
   TextEditingController _todoController = TextEditingController();
@@ -111,10 +131,8 @@ class _AddTaskState extends State<AddTask> {
                   child: KTextFields(
                 obsecuretext: false,
                 readonly: true,
-                //keyboardtype: TextInputType.datetime,
                 onTap: datePicker,
                 controller: _dateController,
-
                 decoration: InputDecoration(
                     label: Text(
                       'Date',
@@ -223,6 +241,7 @@ class _AddTaskState extends State<AddTask> {
                         date: DateFormat('MMM dd,yyyy')
                             .parse(_dateController.text),
                         isChecked: false));
+                    //  saveStringValue();
                     clearText();
                     Navigator.pop(context);
                   });
