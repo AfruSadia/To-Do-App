@@ -25,27 +25,36 @@ class AddTask extends StatefulWidget {
 // }
 
 List<Todo> newtodoList = [];
-// late SharedPreferences prefs;
-// getSharedPreferences() async {
-//   prefs = await SharedPreferences.getInstance();
-// }
-//
+TextEditingController _todoController = TextEditingController();
+TextEditingController _dateController = TextEditingController();
+TextEditingController _categoryController = TextEditingController();
+DateFormat dateFormat = DateFormat('MMM dd,yyyy');
+late SharedPreferences sharedPreferences;
+
 // saveStringValue() async {
-//   prefs = await SharedPreferences.getInstance();
-//   print(jsonEncode(newtodoList));
-//   prefs.setString('key', jsonEncode(newtodoList));
-//   print(prefs);
+//   sharedPreferences = await SharedPreferences.getInstance();
+//   // print(jsonEncode(newtodoList));
+//   // sharedPreferences.setString('key', jsonEncode(newtodoList));
+//   // print(sharedPreferences);
 // }
 // saveIntValue() async {
-//   prefs = await SharedPreferences.getInstance();
-//   prefs.setInt("status", 20);
-//   print(prefs.getInt("status"));
+//   sharedPreferences = await SharedPreferences.getInstance();
+//   sharedPreferences.setInt("status", 20);
+//   print(sharedPreferences.getInt("status"));
 // }
 
+save(String key) async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  //print('newtodoList = $newtodoList');
+  var jsonEncodedValue =
+      (newtodoList as List<dynamic>).map((x) => Todo.fromJson(x)).toList();
+  json.encode(List<dynamic>.from(newtodoList.map((x) => x.toJson())));
+  print('value json decoded = $jsonEncodedValue');
+
+  sharedPreferences.setString('key', json.encode(newtodoList));
+}
+
 class _AddTaskState extends State<AddTask> {
-  TextEditingController _todoController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _categoryController = TextEditingController();
   List category = [
     "Low",
     "Medium",
@@ -72,7 +81,6 @@ class _AddTaskState extends State<AddTask> {
     _dateController.text = dateFormat.format(date!);
   }
 
-  DateFormat dateFormat = DateFormat('MMM dd,yyyy');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,9 +247,10 @@ class _AddTaskState extends State<AddTask> {
                         todo: _todoController.text,
                         priority: _categoryController.text,
                         date: DateFormat('MMM dd,yyyy')
-                            .parse(_dateController.text),
+                            .parse(_dateController.text)
+                            .toString(),
                         isChecked: false));
-                    //  saveStringValue();
+                    save('key');
                     clearText();
                     Navigator.pop(context);
                   });

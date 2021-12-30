@@ -1,7 +1,7 @@
 class Todo {
   final String todo, priority;
   bool isChecked;
-  DateTime date;
+  dynamic date;
   Todo(
       {required this.todo,
       required this.priority,
@@ -13,9 +13,6 @@ class Todo {
         this.date = json['date'],
         this.priority = json['priority'],
         this.isChecked = json['isChecked'];
-
-  // User.fromJson(Map<String, dynamic> json) : name = json['name'],  email = json['email'],phone = json['phone'];
-  //
 
   Map<String, dynamic> toJson() => {
         'todo': todo,

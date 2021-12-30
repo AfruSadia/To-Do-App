@@ -17,30 +17,38 @@ class _MyTaskState extends State<MyTask> {
   int count = 0;
 
   @override
-  // late SharedPreferences prefs;
+  late SharedPreferences prefs;
+
+  // String get key => null;
   // getSharedPreferences() async {
   //   prefs = await SharedPreferences.getInstance();
   // }
   //
   // retrieveStringValue() async {
   //   prefs = await SharedPreferences.getInstance();
-  //   String? value = prefs.getString('key');
-  //
-  //   print(value);
-  //   setState(() {
-  //     newtodoList = value == null || value.isEmpty ? [] : jsonDecode(value);
-  //   });
+  //   // String? value = prefs.getString('key');
+  //   //
+  //   // print(value);
+  //   // setState(() {
+  //   //   newtodoList = value == null || value.isEmpty ? [] : jsonDecode(value);
+  //   // });
   // }
-  // retrieveIntValue() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   int? value = prefs.getInt("status");
-  //   print(value);
-  // }
+  read() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? value = prefs.getString('key');
+    // print('value = $value');
+    var jsonDecodeValue =
+        value == null || value.isEmpty ? [] : json.decode(value);
+    // print('value json decoded = $jsonDecodeValue');
+    setState(() {
+      (newtodoList as List<dynamic>).map((x) => Todo.fromJson(x)).toList();
+    });
+    return json.decode(value!);
+  }
 
   void initState() {
     super.initState();
-
-    retrieveStringValue();
+    read();
   }
 
   @override
@@ -84,9 +92,9 @@ class _MyTaskState extends State<MyTask> {
                       key: UniqueKey(),
                       background: Container(
                         alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(right: 20),
+                        padding: const EdgeInsets.only(right: 20),
                         color: Colors.red,
-                        child: Icon(
+                        child: const Icon(
                           Icons.delete,
                           color: Colors.white,
                         ),
@@ -95,7 +103,6 @@ class _MyTaskState extends State<MyTask> {
                       onDismissed: (_) {
                         setState(() {
                           newtodoList.removeAt(index);
-                          count--;
                         });
                       },
                       child: SizedBox(
@@ -127,7 +134,8 @@ class _MyTaskState extends State<MyTask> {
                                           : TextDecoration.none),
                                 ),
                                 Text(
-                                  dateFormat.format(newtodoList[index].date),
+                                  dateFormat.format(
+                                      DateTime.parse(newtodoList[index].date)),
                                   style: TextStyle(
                                       decoration: newtodoList[index].isChecked
                                           ? TextDecoration.lineThrough
