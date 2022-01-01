@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/style/style.dart';
 
-class DropDown extends StatefulWidget {
-  const DropDown({Key? key}) : super(key: key);
+class KDropdownField extends StatefulWidget {
+  const KDropdownField({Key? key}) : super(key: key);
 
   @override
   _DropDownState createState() => _DropDownState();
 }
 
-class _DropDownState extends State<DropDown> {
+class _DropDownState extends State<KDropdownField> {
   TextEditingController categoryController = TextEditingController();
-  List category = [
-    "High",
-    "Medium",
-    "Low",
-  ];
+  List category = ["High", "Medium", "Low"];
   bool showDropdown = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(
-          right: 10,
-          left: 10,
-        ),
+        margin: const EdgeInsets.only(right: 10, left: 10),
         child: Column(
           children: [
             GestureDetector(
@@ -40,8 +34,7 @@ class _DropDownState extends State<DropDown> {
                 enabled: false,
                 decoration: InputDecoration(
                     labelText: "Priority",
-                    labelStyle:
-                        TextStyle(fontSize: 15, color: KColor.k_brderOutline),
+                    labelStyle: TextStyle(fontSize: 15, color: KColor.borderOutline),
                     border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                       borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -77,8 +70,7 @@ class _DropDownState extends State<DropDown> {
                                   padding: const EdgeInsets.all(15.0),
                                   child: Text(
                                     "${category[index]}",
-                                    style:
-                                        const TextStyle(color: Colors.black54),
+                                    style: const TextStyle(color: Colors.black54),
                                   ),
                                 ),
                               ],

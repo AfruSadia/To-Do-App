@@ -5,47 +5,31 @@ import 'package:todoapp/style/style.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MyTask extends StatefulWidget {
-  MyTask();
+class MyTaskScreen extends StatefulWidget {
+  const MyTaskScreen({Key? key}) : super(key: key);
 
   @override
   _MyTaskState createState() => _MyTaskState();
 }
 
-class _MyTaskState extends State<MyTask> {
+class _MyTaskState extends State<MyTaskScreen> {
   DateFormat dateFormat = DateFormat('MMM dd,yyyy');
   int count = 0;
 
-  @override
-  late SharedPreferences prefs;
-
-  // String get key => null;
-  // getSharedPreferences() async {
-  //   prefs = await SharedPreferences.getInstance();
-  // }
-  //
-  // retrieveStringValue() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   // String? value = prefs.getString('key');
-  //   //
-  //   // print(value);
-  //   // setState(() {
-  //   //   newtodoList = value == null || value.isEmpty ? [] : jsonDecode(value);
-  //   // });
-  // }
+  // TODO :: Study and try to understand what was wrong and how it's been solved
+  /// Try uncommenting print statements to debug through code
   read() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? value = prefs.getString('key');
-    // print('value = $value');
-    var jsonDecodeValue =
-        value == null || value.isEmpty ? [] : json.decode(value);
-    // print('value json decoded = $jsonDecodeValue');
+    final localStorage = await SharedPreferences.getInstance();
+    String localTodoList = localStorage.getString('key') ?? '';
+    // print('localTodoList = $localTodoList');
+    var jsonDecodedValue = localTodoList.isEmpty ? [] : json.decode(localTodoList);
+    // print(' json decoded value = $jsonDecodedValue');
     setState(() {
-      (newtodoList as List<dynamic>).map((x) => Todo.fromJson(x)).toList();
+      todoList = (jsonDecodedValue as List<dynamic>).map((x) => Todo.fromJson(x)).toList();
     });
-    return json.decode(value!);
   }
 
+  @override
   void initState() {
     super.initState();
     read();
@@ -64,29 +48,22 @@ class _MyTaskState extends State<MyTask> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "My Tasks",
-              style: KTextStyle.headline1,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
+            Text("My Tasks", style: KTextStyle.headline1),
+            const SizedBox(height: 5),
             Row(
               children: [
                 Text('$count', style: const TextStyle(color: Colors.grey)),
                 const Text(" of ", style: TextStyle(color: Colors.grey)),
                 Text(
-                  newtodoList.length.toString(),
+                  todoList.length.toString(),
                   style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 18,
-            ),
+            const SizedBox(height: 18),
             Expanded(
               child: ListView.builder(
-                itemCount: newtodoList.length,
+                itemCount: todoList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Dismissible(
                       key: UniqueKey(),
@@ -101,8 +78,9 @@ class _MyTaskState extends State<MyTask> {
                       ),
                       direction: DismissDirection.endToStart,
                       onDismissed: (_) {
+                        // TODO :: Implement delete from local storage
                         setState(() {
-                          newtodoList.removeAt(index);
+                          todoList.removeAt(index);
                         });
                       },
                       child: SizedBox(
@@ -111,44 +89,31 @@ class _MyTaskState extends State<MyTask> {
                         child: Card(
                           child: ListTile(
                             title: Text(
-                              newtodoList[index].todo,
-                              style: TextStyle(
-                                  decoration: newtodoList[index].isChecked
-                                      ? TextDecoration.lineThrough
-                                      : TextDecoration.none),
+                              todoList[index].todo,
+                              style: TextStyle(decoration: todoList[index].isChecked ? TextDecoration.lineThrough : TextDecoration.none),
                             ),
                             subtitle: Row(
                               children: [
                                 Text(
-                                  newtodoList[index].priority,
-                                  style: TextStyle(
-                                      decoration: newtodoList[index].isChecked
-                                          ? TextDecoration.lineThrough
-                                          : TextDecoration.none),
+                                  todoList[index].priority,
+                                  style: TextStyle(decoration: todoList[index].isChecked ? TextDecoration.lineThrough : TextDecoration.none),
                                 ),
                                 Text(
                                   " * ",
-                                  style: TextStyle(
-                                      decoration: newtodoList[index].isChecked
-                                          ? TextDecoration.lineThrough
-                                          : TextDecoration.none),
+                                  style: TextStyle(decoration: todoList[index].isChecked ? TextDecoration.lineThrough : TextDecoration.none),
                                 ),
                                 Text(
-                                  dateFormat.format(
-                                      DateTime.parse(newtodoList[index].date)),
-                                  style: TextStyle(
-                                      decoration: newtodoList[index].isChecked
-                                          ? TextDecoration.lineThrough
-                                          : TextDecoration.none),
+                                  dateFormat.format(DateTime.parse(todoList[index].date)),
+                                  style: TextStyle(decoration: todoList[index].isChecked ? TextDecoration.lineThrough : TextDecoration.none),
                                 )
                               ],
                             ),
                             trailing: GestureDetector(
                               onTap: () {
+                                // TODO :: Store check/uncheck state change in local storage as well
                                 setState(() {
-                                  newtodoList[index].isChecked =
-                                      !newtodoList[index].isChecked;
-                                  if (newtodoList[index].isChecked) {
+                                  todoList[index].isChecked = !todoList[index].isChecked;
+                                  if (todoList[index].isChecked) {
                                     count++;
                                   } else {
                                     count--;
@@ -157,17 +122,12 @@ class _MyTaskState extends State<MyTask> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: newtodoList[index].isChecked
-                                        ? KColor.k_bg
-                                        : Colors.transparent,
+                                    color: todoList[index].isChecked ? KColor.k_bg : Colors.transparent,
                                     borderRadius: BorderRadius.circular(3.0),
-                                    border: newtodoList[index].isChecked
-                                        ? null
-                                        : Border.all(
-                                            color: Colors.grey, width: 2)),
+                                    border: todoList[index].isChecked ? null : Border.all(color: Colors.grey, width: 2)),
                                 width: 20,
                                 height: 20,
-                                child: newtodoList[index].isChecked
+                                child: todoList[index].isChecked
                                     ? const Icon(
                                         Icons.check,
                                         color: Colors.white,
@@ -191,12 +151,12 @@ class _MyTaskState extends State<MyTask> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => AddTask(),
+              builder: (_) => const AddTaskScreen(),
             ),
           );
           setState(() {});
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

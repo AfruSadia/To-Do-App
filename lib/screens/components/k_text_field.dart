@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/style/style.dart';
 
-class KTextFields extends StatefulWidget {
+class KTextField extends StatefulWidget {
   final decoration;
   final keyboardtype;
   final TextEditingController? controller;
   final validator, readonly;
   final onTap;
-  bool obsecuretext;
+  final bool obsecuretext;
 
-  KTextFields(
-      {this.onTap,
-      this.controller,
-      required this.obsecuretext,
-      required this.decoration,
-      this.keyboardtype,
-      this.validator,
-      this.readonly});
+  KTextField({this.onTap, this.controller, required this.obsecuretext, required this.decoration, this.keyboardtype, this.validator, this.readonly});
 
   @override
-  State<KTextFields> createState() => _KTextFieldsState();
+  State<KTextField> createState() => _KTextFieldsState();
 }
 
-class _KTextFieldsState extends State<KTextFields> {
+class _KTextFieldsState extends State<KTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -8,6 +8,11 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  // TODO :: Remove unnecessary comments/ imports
+  /// Keep code files clean, short
+  /// esp. main.dart file
+  /// separate HomeScreen code into another file
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyTask(),
+      home: MyTaskScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

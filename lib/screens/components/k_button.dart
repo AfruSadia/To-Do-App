@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/style/style.dart';
 
-class Button extends StatelessWidget {
+class KButton extends StatelessWidget {
   final String button;
   final Color color;
-  Button({required this.button, required this.color});
+  KButton({required this.button, required this.color});
 
   @override
   Widget build(BuildContext context) {
