@@ -22,10 +22,13 @@ class _MyTaskState extends State<MyTaskScreen> {
     final localStorage = await SharedPreferences.getInstance();
     String localTodoList = localStorage.getString('key') ?? '';
     // print('localTodoList = $localTodoList');
-    var jsonDecodedValue = localTodoList.isEmpty ? [] : json.decode(localTodoList);
+    var jsonDecodedValue =
+        localTodoList.isEmpty ? [] : json.decode(localTodoList);
     // print(' json decoded value = $jsonDecodedValue');
     setState(() {
-      todoList = (jsonDecodedValue as List<dynamic>).map((x) => Todo.fromJson(x)).toList();
+      todoList = (jsonDecodedValue as List<dynamic>)
+          .map((x) => Todo.fromJson(x))
+          .toList();
     });
   }
 
@@ -81,6 +84,20 @@ class _MyTaskState extends State<MyTaskScreen> {
                         // TODO :: Implement delete from local storage
                         setState(() {
                           todoList.removeAt(index);
+                          delete() async {
+                            final localStorage =
+                                await SharedPreferences.getInstance();
+                            var jsonEncodedValue = json.encode(
+                                List<dynamic>.from(
+                                    todoList.map((x) => x.toJson())));
+
+                            localStorage.setString('key', jsonEncodedValue);
+                          }
+
+                          delete();
+                          if (count > 0) {
+                            count--;
+                          }
                         });
                       },
                       child: SizedBox(
@@ -90,41 +107,64 @@ class _MyTaskState extends State<MyTaskScreen> {
                           child: ListTile(
                             title: Text(
                               todoList[index].todo,
-                              style: TextStyle(decoration: todoList[index].isChecked ? TextDecoration.lineThrough : TextDecoration.none),
+                              style: TextStyle(
+                                  decoration: todoList[index].isChecked
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none),
                             ),
-                            subtitle: Row(
-                              children: [
-                                Text(
-                                  todoList[index].priority,
-                                  style: TextStyle(decoration: todoList[index].isChecked ? TextDecoration.lineThrough : TextDecoration.none),
-                                ),
-                                Text(
-                                  " * ",
-                                  style: TextStyle(decoration: todoList[index].isChecked ? TextDecoration.lineThrough : TextDecoration.none),
-                                ),
-                                Text(
-                                  dateFormat.format(DateTime.parse(todoList[index].date)),
-                                  style: TextStyle(decoration: todoList[index].isChecked ? TextDecoration.lineThrough : TextDecoration.none),
-                                )
-                              ],
-                            ),
+                            subtitle: Text(
+                                '${dateFormat.format(DateTime.parse(todoList[index].date))} * ${todoList[index].priority}',
+                                style: TextStyle(
+                                    decoration: todoList[index].isChecked
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none)),
                             trailing: GestureDetector(
                               onTap: () {
                                 // TODO :: Store check/uncheck state change in local storage as well
                                 setState(() {
-                                  todoList[index].isChecked = !todoList[index].isChecked;
+                                  todoList[index].isChecked =
+                                      !todoList[index].isChecked;
+                                  storeChecked() async {
+                                    final localStorage =
+                                        await SharedPreferences.getInstance();
+                                    var jsonEncodedValue = json.encode(
+                                        List<dynamic>.from(
+                                            todoList.map((x) => x.toJson())));
+
+                                    localStorage.setString(
+                                        'key', jsonEncodedValue);
+                                    //print(
+                                    //'value json decoded = $jsonEncodedValue');
+                                  }
+
+                                  storeChecked();
                                   if (todoList[index].isChecked) {
                                     count++;
-                                  } else {
+                                  } else if (count > 0 &&
+                                      !todoList[index].isChecked) {
                                     count--;
                                   }
+                                  intValueStore() async {
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    prefs.setInt('intValue', count);
+                                    print(count);
+                                    return prefs.getInt('intValue');
+                                  }
+
+                                  intValueStore();
                                 });
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: todoList[index].isChecked ? KColor.k_bg : Colors.transparent,
+                                    color: todoList[index].isChecked
+                                        ? KColor.k_bg
+                                        : Colors.transparent,
                                     borderRadius: BorderRadius.circular(3.0),
-                                    border: todoList[index].isChecked ? null : Border.all(color: Colors.grey, width: 2)),
+                                    border: todoList[index].isChecked
+                                        ? null
+                                        : Border.all(
+                                            color: Colors.grey, width: 2)),
                                 width: 20,
                                 height: 20,
                                 child: todoList[index].isChecked
